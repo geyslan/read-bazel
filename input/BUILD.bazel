@@ -1,0 +1,35 @@
+load("@io_bazel_rules_go//go:def.bzl", "nogo")
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("//:def.bzl", "gazelle", "gazelle_binary")
+
+gazelle_binary(
+    name = "gazelle_local",
+    languages = [
+        "//language/proto",
+        "//language/go",
+        "//internal/language/test_filegroup",
+        "@bazel_skylib//gazelle/bzl",
+    ],
+)
+
+nogo(
+    name = "nogo",
+    vet = True,
+    visibility = ["//visibility:public"],
+)
+
+deployable(
+    target = "development",
+    environment = {
+        "ENV_VAR_1": "value1",
+        "ENV_VAR_2": "value2",
+    },
+)
+
+deployable(
+    target = "production",
+    environment = {
+        "ENV_VAR_1": "prod_value1",
+        "ENV_VAR_2": "prod_value2",
+    },
+)
